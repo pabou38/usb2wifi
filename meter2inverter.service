@@ -1,0 +1,29 @@
+#StandardError=
+#Controls where file descriptor 1 (STDOUT) of the executed processes is connecte                               d to.
+# one of inherit, null, tty, journal, syslog, kmsg, journal+console, syslog+cons                               ole, kmsg+console or socket.
+
+#KillMode=¶
+#Specifies how processes of this unit shall be killed. One of control-group, mixed, process, none.
+#it is not recommended to set KillMode= to process or even none,
+#Defaults to control-group
+
+[Unit]
+Description=meter2inverter: Victron cerbo GX to EM112 energy meter via wifi
+After=network.target
+
+[Service]
+Type=simple
+#ExecStartPre=
+ExecStart=/home/pi/meter2inverter/meter2inverter.py 
+ExecStop=kill -9 `pgrep meter2inverter`
+StandardOutput=null
+StandardError=null
+KillMode=control-group
+#Restart=on-failure
+Restart=always
+RestartSec=10s
+User=pi
+Group=pi
+
+[Install]
+WantedBy=multi-user.target
